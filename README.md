@@ -8,4 +8,4 @@
 
 ### Compiling
 - Clone the repo `git clone https://github.com/annasajkh/cmakeg`
-- for debug build do `python build.py` for release build do `python build.py --build-type release`
+- For debug build do `python build.py` for release build do `python build.py --build-type release`
