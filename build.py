@@ -3,8 +3,6 @@ import platform
 import subprocess
 import argparse
 
-from enum import Enum
-
 def build_project(build_type: str):
     os.chdir("cmakeg/dependencies/")
 
