@@ -1,0 +1,5 @@
+﻿set(PROJECT_NAME ExecutableProjectTemplate)
+
+file(GLOB_RECURSE SOURCE_FILES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+
+add_executable(${PROJECT_NAME} "${SOURCE_FILES}")

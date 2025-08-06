@@ -1,0 +1,8 @@
+/out
+/build
+/.vs
+/.vscode
+/vcpkg_installed
+/.idea
+/cmakeg/dependencies/boost
+/cmakeg/dependencies/CLI11
