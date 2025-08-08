@@ -7,6 +7,8 @@ file(GLOB_RECURSE SOURCE_FILES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/sr
 
 add_executable(${PROJECT_NAME} "${SOURCE_FILES}")
 
+set_target_properties(${PROJECT_NAME} PROPERTIES VS_DEBUGGER_COMMAND_ARGUMENTS "--help")
+
 target_link_libraries(${PROJECT_NAME} PRIVATE CLI11::CLI11 Boost::dll Boost::algorithm)
 
 add_custom_target(copy_assets_dir

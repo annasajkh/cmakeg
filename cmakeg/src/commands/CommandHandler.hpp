@@ -12,7 +12,6 @@ namespace cmakeg::commands
 		virtual void execute() = 0;
 
 	protected:
-		boost::filesystem::path workingDirPath;
 		boost::filesystem::path executablePath;
 	};
 }

@@ -2,6 +2,7 @@
 #include <CLI/CLI.hpp>
 #include "commands/WorkspaceCommandHandler.hpp"
 #include "commands/ExecutableProjectCommandHandler.hpp"
+#include "commands/ExecutableWorkspaceProjectCommandHandler.hpp"
 
 using namespace cmakeg::commands;
 
@@ -12,6 +13,7 @@ int main(int argc, char* argv[])
 
     auto workspaceCommandHandler = std::make_shared<WorkspaceCommandHandler>();
     auto executableProjectCommandHandler = std::make_shared<ExecutableProjectCommandHandler>();
+    auto executableWorkspaceProjectCommandHandler = std::make_shared<ExecutableWorkspaceProjectCommandHandler>();
     
     CLI::App* workspaceSubCommand = app.add_subcommand("workspace", "Create a new workspace");
     workspaceSubCommand->add_option("--name", workspaceCommandHandler->workspaceName, "The name of the workspace")->required();
@@ -26,6 +28,14 @@ int main(int argc, char* argv[])
     executableProjectSubCommand->add_option("--version", executableProjectCommandHandler->version, "The executable project version (this option only work if this project is not part of a workspace)")->default_str("0.0.1");
     executableProjectSubCommand->add_flag("--add-assets", executableProjectCommandHandler->isAddAssets, "Add assets directory, this directory will get copied to the executable directory when building useful if the program need to load external resources");
 
+    CLI::App* executableWorkspaceProjectSubCommand = app.add_subcommand("executable-workspace-project", "Create a new workspace with executable project inside of it");
+    executableWorkspaceProjectSubCommand->add_option("--project-name", executableWorkspaceProjectCommandHandler->executableProjectName, "The name of the workspace")->required();
+    executableWorkspaceProjectSubCommand->add_option("--workspace-name", executableWorkspaceProjectCommandHandler->executableWorkspaceName, "The name of the project")->required();
+    executableWorkspaceProjectSubCommand->add_option("--cmake-minimum-required", executableWorkspaceProjectCommandHandler->cmakeMinimumRequired, "The cmake minimum version required")->default_str("3.20");
+    executableWorkspaceProjectSubCommand->add_option("--cpp-version", executableWorkspaceProjectCommandHandler->cppVersion, "The c++ standard version")->default_str("20");
+    executableWorkspaceProjectSubCommand->add_option("--version", executableWorkspaceProjectCommandHandler->version, "The executable version")->default_str("0.0.1");
+    executableWorkspaceProjectSubCommand->add_flag("--add-assets", executableWorkspaceProjectCommandHandler->isAddAssets, "Add assets directory, this directory will get copied to the executable directory when building useful if the program need to load external resources");
+
     CLI11_PARSE(app, argc, argv);
 
     if (app.got_subcommand("workspace"))
@@ -35,5 +45,9 @@ int main(int argc, char* argv[])
     else if (app.got_subcommand("executable-project"))
     {
         executableProjectCommandHandler->execute();
+    }
+    else if (app.got_subcommand("executable-workspace-project"))
+    {
+        executableWorkspaceProjectCommandHandler->execute();
     }
 }

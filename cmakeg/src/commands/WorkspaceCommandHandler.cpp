@@ -5,14 +5,14 @@
 
 using namespace cmakeg::commands;
 
-WorkspaceCommandHandler::WorkspaceCommandHandler() : CommandHandler()
+WorkspaceCommandHandler::WorkspaceCommandHandler() : CommandHandler(), workspaceTemplatePath(executablePath / "assets" / "WorkspaceTemplate")
 {
-	workspaceTemplatePath = executablePath / "assets" / "WorkspaceTemplate";
+	
 }
 
 void WorkspaceCommandHandler::execute()
 {
-	workspaceDestinationPath = workingDirPath / workspaceName;
+	workspaceDestinationPath = boost::filesystem::current_path() / workspaceName;
 
 	if (boost::filesystem::is_directory(workspaceDestinationPath))
 	{

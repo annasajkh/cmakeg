@@ -7,8 +7,13 @@ using namespace cmakeg::commands;
 
 ExecutableProjectCommandHandler::ExecutableProjectCommandHandler() : CommandHandler()
 {
-	isPartOfAWorkspace = boost::filesystem::exists(workingDirPath / "CMakeLists.txt") && boost::filesystem::exists(workingDirPath / ".gitignore");
+	isPartOfAWorkspace = false;
+}
 
+void ExecutableProjectCommandHandler::execute()
+{
+	isPartOfAWorkspace = boost::filesystem::exists(boost::filesystem::current_path() / "CMakeLists.txt") && boost::filesystem::exists(boost::filesystem::current_path() / ".gitignore");
+	
 	if (isPartOfAWorkspace)
 	{
 		executableProjectTemplatePath = executablePath / "assets" / "ExecutableProjectTemplate";
@@ -17,11 +22,8 @@ ExecutableProjectCommandHandler::ExecutableProjectCommandHandler() : CommandHand
 	{
 		executableProjectTemplatePath = executablePath / "assets" / "ExecutableProjectWithoutWorkspaceTemplate";
 	}
-}
 
-void ExecutableProjectCommandHandler::execute()
-{
-	executableProjectDestinationPath = workingDirPath / executableProjectName;
+	executableProjectDestinationPath = boost::filesystem::current_path() / executableProjectName;
 
 	if (boost::filesystem::is_directory(executableProjectDestinationPath))
 	{
@@ -34,9 +36,9 @@ void ExecutableProjectCommandHandler::execute()
 	if (isPartOfAWorkspace)
 	{
 		std::string executableProjectReferenceStr = std::format("\nadd_subdirectory({})", executableProjectName);
-		std::string workspaceCMakeLists = filesystem_utils::fileReadText(workingDirPath / "CMakeLists.txt");
+		std::string workspaceCMakeLists = filesystem_utils::fileReadText(boost::filesystem::current_path() / "CMakeLists.txt");
 
-		filesystem_utils::fileWriteText(workingDirPath / "CMakeLists.txt", workspaceCMakeLists + executableProjectReferenceStr);
+		filesystem_utils::fileWriteText(boost::filesystem::current_path() / "CMakeLists.txt", workspaceCMakeLists + executableProjectReferenceStr);
 
 		filesystem_utils::findAndReplaceTextFile(executableProjectDestinationPath / "CMakeLists.txt", "ExecutableProjectTemplate", executableProjectName);
 	}
@@ -78,4 +80,4 @@ add_dependencies(${PROJECT_NAME} copy_assets_dir))";
 
 		boost::filesystem::create_directory(executableProjectDestinationPath / "assets");
 	}
-}
+};
