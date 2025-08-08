@@ -8,13 +8,13 @@ using namespace cmakeg::commands;
 
 int main(int argc, char* argv[])
 {
-    CLI::App app { "Generate cmake projects based on a template" };
+    CLI::App app{ "Generate cmake projects based on a template" };
     argv = app.ensure_utf8(argv);
 
     auto workspaceCommandHandler = std::make_shared<WorkspaceCommandHandler>();
     auto executableProjectCommandHandler = std::make_shared<ExecutableProjectCommandHandler>();
     auto executableWorkspaceProjectCommandHandler = std::make_shared<ExecutableWorkspaceProjectCommandHandler>();
-    
+
     CLI::App* workspaceSubCommand = app.add_subcommand("workspace", "Create a new workspace");
     workspaceSubCommand->add_option("--name", workspaceCommandHandler->workspaceName, "The name of the workspace")->required();
     workspaceSubCommand->add_option("--cmake-minimum-required", workspaceCommandHandler->cmakeMinimumRequired, "The cmake minimum version required for the workspace")->default_str("3.20");
