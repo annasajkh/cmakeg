@@ -10,8 +10,6 @@ namespace cmakeg::commands
 	class ExecutableWorkspaceProjectCommandHandler : public CommandHandler
 	{
 	public:
-		ExecutableWorkspaceProjectCommandHandler();
-		
 		std::string executableProjectName;
 		std::string executableWorkspaceName;
 		std::string cmakeMinimumRequired = "3.20";
@@ -19,10 +17,13 @@ namespace cmakeg::commands
 		std::string version = "0.0.1";
 		bool isAddAssets = false;
 
-		void execute() override;
-
 	private:
 		WorkspaceCommandHandler workspaceCommandHandler;
 		ExecutableProjectCommandHandler executableProjectCommandHandler;
+
+	public:
+		ExecutableWorkspaceProjectCommandHandler();
+
+		void execute() override;
 	};
 }

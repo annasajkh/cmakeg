@@ -2,19 +2,40 @@
 #include <iostream>
 #include <format>
 #include "../utils/filesystem_utils.hpp"
+#include <boost/algorithm/algorithm.hpp>
 
 using namespace cmakeg::commands;
 
 ExecutableProjectCommandHandler::ExecutableProjectCommandHandler() : CommandHandler()
 {
-	isPartOfAWorkspace = false;
+
 }
 
 void ExecutableProjectCommandHandler::execute()
 {
-	isPartOfAWorkspace = boost::filesystem::exists(boost::filesystem::current_path() / "CMakeLists.txt") && boost::filesystem::exists(boost::filesystem::current_path() / ".gitignore");
-	
+    bool currentDirHaveCMakeList = boost::filesystem::exists(boost::filesystem::current_path() / "CMakeLists.txt");
+	bool isPartOfAWorkspace = currentDirHaveCMakeList;
+
 	if (isPartOfAWorkspace)
+	{
+		std::string workspaceCMakeFile = filesystem_utils::fileReadText(boost::filesystem::current_path() / "CMakeLists.txt");
+
+		isPartOfAWorkspace = isPartOfAWorkspace && (workspaceCMakeFile.find("# WORKSPACE INDICATOR DON'T REMOVE THIS COMMENT IF YOU WANT TO KEEP USING CMAKEG TO MANAGE THIS WORKSPACE") != std::string::npos);
+	}
+
+	if (!isPartOfAWorkspace && currentDirHaveCMakeList)
+	{
+		std::cout << "Cannot find a workspace but found CMakeList.txt, is workspace indicator deleted?\n";
+        return;
+	}
+    else if(!isPartOfAWorkspace && !currentDirHaveCMakeList)
+    {
+        std::cout << "Cannot find a workspace creating an independent executable project\n";
+    }
+	
+    boost::filesystem::path executableProjectTemplatePath;
+	
+    if (isPartOfAWorkspace)
 	{
 		executableProjectTemplatePath = executablePath / "assets" / "ExecutableProjectTemplate";
 	}
@@ -23,7 +44,7 @@ void ExecutableProjectCommandHandler::execute()
 		executableProjectTemplatePath = executablePath / "assets" / "ExecutableProjectWithoutWorkspaceTemplate";
 	}
 
-	executableProjectDestinationPath = boost::filesystem::current_path() / executableProjectName;
+	boost::filesystem::path executableProjectDestinationPath = boost::filesystem::current_path() / executableProjectName;
 
 	if (boost::filesystem::is_directory(executableProjectDestinationPath))
 	{
