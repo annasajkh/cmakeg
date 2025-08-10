@@ -2,6 +2,7 @@
 #include "DeleteProjectCommandHandler.hpp"
 #include "../utils/filesystem_utils.hpp"
 #include <iostream>
+#include <boost/algorithm/string.hpp>
 
 using namespace cmakeg::commands;
 
@@ -12,6 +13,12 @@ DeleteProjectCommandHandler::DeleteProjectCommandHandler() : CommandHandler()
 
 void DeleteProjectCommandHandler::execute()
 {
+    if (name.find(".") != std::string::npos || name.find("/") != std::string::npos || name.find("\\") != std::string::npos)
+    {
+        std::cout << "Name of a project to delete shouldn't contains . or / or \\\n";
+        return;
+    }
+
     bool currentDirHaveCMakeList = boost::filesystem::exists(boost::filesystem::current_path() / "CMakeLists.txt");
 	bool isPartOfAWorkspace = currentDirHaveCMakeList;
 
@@ -46,9 +53,11 @@ void DeleteProjectCommandHandler::execute()
 	{
 		std::string projectCMakeFile = filesystem_utils::fileReadText(boost::filesystem::current_path() / name / "CMakeLists.txt");
 
-		isAProject = isAProject && 
-			         ((projectCMakeFile.find("# PROJECT INDICATOR DON'T REMOVE THIS COMMENT IF YOU WANT TO KEEP USING CMAKEG TO MANAGE THIS PROJECT") != std::string::npos) ||
-				     (projectCMakeFile.find("# LIBRARY INDICATOR DON'T REMOVE THIS COMMENT IF YOU WANT TO KEEP USING CMAKEG TO MANAGE THIS LIBRARY") != std::string::npos));
+		isAProject = isAProject && (
+                        (projectCMakeFile.find("# EXECUTABLE PROJECT INDICATOR DON'T REMOVE THIS COMMENT IF YOU WANT TO KEEP USING CMAKEG TO MANAGE THIS PROJECT") != std::string::npos) ||
+                        (projectCMakeFile.find("# STATIC LIBRARY PROJECT INDICATOR DON'T REMOVE THIS COMMENT IF YOU WANT TO KEEP USING CMAKEG TO MANAGE THIS LIBRARY") != std::string::npos) ||
+                        (projectCMakeFile.find("# DYNAMIC LIBRARY PROJECT INDICATOR DON'T REMOVE THIS COMMENT IF YOU WANT TO KEEP USING CMAKEG TO MANAGE THIS LIBRARY") != std::string::npos)
+                    );
 	}
 
 	if (!isAProject && projectDirHaveCMakeList)

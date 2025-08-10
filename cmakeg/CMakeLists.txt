@@ -1,4 +1,6 @@
-﻿set(PROJECT_NAME cmakeg)
+﻿# EXECUTABLE PROJECT INDICATOR DON'T REMOVE THIS COMMENT IF YOU WANT TO KEEP USING CMAKEG TO MANAGE THIS PROJECT
+
+set(PROJECT_NAME cmakeg)
 
 add_subdirectory(dependencies/CLI11)
 add_subdirectory(dependencies/boost)
@@ -7,7 +9,7 @@ file(GLOB_RECURSE SOURCE_FILES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/sr
 
 add_executable(${PROJECT_NAME} "${SOURCE_FILES}")
 
-set_target_properties(${PROJECT_NAME} PROPERTIES VS_DEBUGGER_COMMAND_ARGUMENTS "--help")
+set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/${PROJECT_NAME})
 
 target_link_libraries(${PROJECT_NAME} PRIVATE CLI11::CLI11 Boost::dll Boost::algorithm)
 

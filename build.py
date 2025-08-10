@@ -41,11 +41,6 @@ def build_project(build_type: str):
     
     os.chdir("build")
     
-    if not os.path.exists(build_type):
-        os.mkdir(build_type)
-    
-    os.chdir(build_type)
-    
     build_dir = f"{system.lower()}-{machine.lower()}"
     
     if not os.path.exists(build_dir):
@@ -53,7 +48,7 @@ def build_project(build_type: str):
     
     os.chdir(build_dir)
     
-    cmake_generate_cmd = ["cmake", f"-DCMAKE_BUILD_TYPE={build_type.title()}", "../../.."]
+    cmake_generate_cmd = ["cmake", f"-DCMAKE_BUILD_TYPE={build_type.title()}", "../../"]
     
     if system == "Windows":
         cmake_build_cmd = ["cmake", "--build", ".", "--config", f"{build_type.title()}", "--", "/m"]
