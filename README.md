@@ -9,3 +9,45 @@
 ### Compiling
 - Clone the repo `git clone https://github.com/annasajkh/cmakeg`
 - For debug build do `python build.py` for release build do `python build.py --build-type release`
+
+### Example Usage
+Create a new workspace
+```bash
+cmakeg workspace --name TestWorkspace
+```
+Go to the workspace
+```bash
+cd TestWorkspace
+```
+Add a new executable project to the workspace with the name TestExecutableProject
+```bash
+cmakeg executable-project --name TestExecutableProject
+```
+Add a new static library project to the workspace with the name TestStaticLibrary
+```bash
+cmakeg static-library-project --name TestStaticLibrary
+```
+Reference TestStaticLibrary to the TestExecutableProject so you can use the library
+```bash
+cmakeg reference --library-source-name TestStaticLibrary --project-destination-name TestExecutableProject
+```
+Change the content of `main.cpp` in `TestWorkspace/TestExecutableProject/src/main.cpp` to
+```cpp
+#include <iostream>
+#include "TestStaticLibrary/Computer.hpp"
+
+int main()
+{
+    std::cout << "The meaning of life is " << computer::getTheMeaningOfLife() << "\n";
+    std::cin.get();
+}
+```
+Compile the everything (run this in the TestWorkspace directory)
+```bash
+python build.py
+```
+This is debug by default for release build use
+```bash
+python build.py --build-type release
+```
+The executable should be compiled to `TestWorkspace\build\your-os-and-arch\bin\TestExecutableProject`
