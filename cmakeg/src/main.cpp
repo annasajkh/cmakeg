@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
     executableProjectSubCommand->add_option("--version", executableProjectCommandHandler->version, "The executable project version (this option only work if this project is not part of a workspace)")->default_str("0.0.1");
     executableProjectSubCommand->add_flag("--add-assets", executableProjectCommandHandler->isAddAssets, "Add assets directory, this directory will get copied to the executable directory when building useful if the program need to load external resources");
 
-    CLI::App* executableWorkspaceProjectSubCommand = app.add_subcommand("executable-workspace-project", "Create a new workspace with executable project inside of it");
+    CLI::App* executableWorkspaceProjectSubCommand = app.add_subcommand("executable-workspace", "Create a new workspace with executable project inside of it");
     executableWorkspaceProjectSubCommand->add_option("--workspace-name", executableWorkspaceProjectCommandHandler->workspaceName, "The name of the workspace")->required();
     executableWorkspaceProjectSubCommand->add_option("--executable-project-name", executableWorkspaceProjectCommandHandler->executableProjectName, "The name of the executable project")->required();
     executableWorkspaceProjectSubCommand->add_option("--cmake-minimum-required", executableWorkspaceProjectCommandHandler->cmakeMinimumRequired, "The cmake minimum version required")->default_str("3.20");
@@ -75,7 +75,7 @@ int main(int argc, char* argv[])
     {
         executableProjectCommandHandler->execute();
     }
-    else if (app.got_subcommand("executable-workspace-project"))
+    else if (app.got_subcommand("executable-workspace"))
     {
         executableWorkspaceProjectCommandHandler->execute();
     }
