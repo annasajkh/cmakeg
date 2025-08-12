@@ -5,6 +5,21 @@
 
 namespace cmakeg::commands
 {
+    enum class WorkspaceIntegrityStatus
+    {
+        NotExist,
+        ContainsCMakeButNotIdentifier,
+        Valid,
+    };
+
+    enum class ProjectIntegrityStatus
+    {
+        NotExist,
+        ContainsCMakeButNotIdentifier,
+        Valid,
+        Skip
+    };
+    
 	class CommandHandler
 	{
 	public:
@@ -13,5 +28,8 @@ namespace cmakeg::commands
 
 	protected:
 		boost::filesystem::path executablePath;
+
+        WorkspaceIntegrityStatus checkWorkspaceIntegrity();
+        ProjectIntegrityStatus checkProjectIntegrity(std::string projectName, std::vector<std::string>& identifiers);
 	};
 }

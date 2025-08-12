@@ -13,29 +13,22 @@ StaticLibraryProjectCommandHandler::StaticLibraryProjectCommandHandler() : Comma
 
 void StaticLibraryProjectCommandHandler::execute()
 {
-    bool currentDirHaveCMakeList = boost::filesystem::exists(boost::filesystem::current_path() / "CMakeLists.txt");
-	bool isPartOfAWorkspace = currentDirHaveCMakeList;
+    WorkspaceIntegrityStatus workspaceIntegrityStatus = checkWorkspaceIntegrity();
 
-	if (isPartOfAWorkspace)
-	{
-		std::string workspaceCMakeFile = filesystem_utils::fileReadText(boost::filesystem::current_path() / "CMakeLists.txt");
-
-		isPartOfAWorkspace = isPartOfAWorkspace && (workspaceCMakeFile.find("# WORKSPACE INDICATOR DON'T REMOVE THIS COMMENT IF YOU WANT TO KEEP USING CMAKEG TO MANAGE THIS WORKSPACE") != std::string::npos);
-	}
-
-	if (!isPartOfAWorkspace && currentDirHaveCMakeList)
-	{
-		std::cout << "Cannot find a workspace but found CMakeList.txt, is workspace indicator deleted?\n";
-        return;
-	}
-    else if(!isPartOfAWorkspace && !currentDirHaveCMakeList)
+    switch (workspaceIntegrityStatus)
     {
+    case WorkspaceIntegrityStatus::NotExist:
         std::cout << "Cannot find a workspace creating an independent static library project\n";
+        break;
+    case WorkspaceIntegrityStatus::ContainsCMakeButNotIdentifier:
+        std::cout << "Cannot find the workspace but found CMakeList.txt, is workspace identifier deleted?\n";
+        return;
     }
+
     
     boost::filesystem::path staticLibraryProjectTemplatePath;
 
-    if (isPartOfAWorkspace)
+    if (workspaceIntegrityStatus == WorkspaceIntegrityStatus::Valid)
 	{
 		staticLibraryProjectTemplatePath = executablePath / "assets" / "StaticLibraryProjectTemplate";
 	}
@@ -54,7 +47,7 @@ void StaticLibraryProjectCommandHandler::execute()
 
 	boost::filesystem::copy(staticLibraryProjectTemplatePath, staticLibraryProjectDestinationPath, boost::filesystem::copy_options::recursive);
     
-    if (isPartOfAWorkspace)
+    if (workspaceIntegrityStatus == WorkspaceIntegrityStatus::Valid)
 	{
         boost::filesystem::rename(staticLibraryProjectDestinationPath / "include" / "StaticLibraryProjectTemplate", staticLibraryProjectDestinationPath / "include" / staticLibraryProjectName);
         filesystem_utils::findAndReplaceTextFile(staticLibraryProjectDestinationPath / "src" / "Computer.cpp", "StaticLibraryProjectTemplate", staticLibraryProjectName);
@@ -65,7 +58,7 @@ void StaticLibraryProjectCommandHandler::execute()
         filesystem_utils::findAndReplaceTextFile(staticLibraryProjectDestinationPath / "src" / "Computer.cpp", "StaticLibraryProjectWithoutWorkspaceTemplate", staticLibraryProjectName);
     }
     
-    if (isPartOfAWorkspace)
+    if (workspaceIntegrityStatus == WorkspaceIntegrityStatus::Valid)
 	{
 		std::string executableProjectReferenceStr = std::format("\nadd_subdirectory({})", staticLibraryProjectName);
 		std::string workspaceCMakeLists = filesystem_utils::fileReadText(boost::filesystem::current_path() / "CMakeLists.txt");

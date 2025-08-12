@@ -11,7 +11,7 @@ namespace cmakeg::commands
 	{
 	public:
 		std::string executableProjectName;
-		std::string executableWorkspaceName;
+		std::string workspaceName;
 		std::string cmakeMinimumRequired = "3.20";
 		std::string cppVersion = "20";
 		std::string version = "0.0.1";

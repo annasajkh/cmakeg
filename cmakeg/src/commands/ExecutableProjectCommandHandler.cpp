@@ -13,29 +13,21 @@ ExecutableProjectCommandHandler::ExecutableProjectCommandHandler() : CommandHand
 
 void ExecutableProjectCommandHandler::execute()
 {
-    bool currentDirHaveCMakeList = boost::filesystem::exists(boost::filesystem::current_path() / "CMakeLists.txt");
-	bool isPartOfAWorkspace = currentDirHaveCMakeList;
+    WorkspaceIntegrityStatus workspaceIntegrityStatus = checkWorkspaceIntegrity();
 
-	if (isPartOfAWorkspace)
-	{
-		std::string workspaceCMakeFile = filesystem_utils::fileReadText(boost::filesystem::current_path() / "CMakeLists.txt");
-
-		isPartOfAWorkspace = isPartOfAWorkspace && (workspaceCMakeFile.find("# WORKSPACE INDICATOR DON'T REMOVE THIS COMMENT IF YOU WANT TO KEEP USING CMAKEG TO MANAGE THIS WORKSPACE") != std::string::npos);
-	}
-
-	if (!isPartOfAWorkspace && currentDirHaveCMakeList)
-	{
-		std::cout << "Cannot find a workspace but found CMakeList.txt, is workspace indicator deleted?\n";
-        return;
-	}
-    else if(!isPartOfAWorkspace && !currentDirHaveCMakeList)
+    switch (workspaceIntegrityStatus)
     {
-        std::cout << "Cannot find a workspace creating an independent executable project\n";
+    case WorkspaceIntegrityStatus::NotExist:
+        std::cout << "Cannot find the workspace creating an independent executable project\n";
+        break;
+    case WorkspaceIntegrityStatus::ContainsCMakeButNotIdentifier:
+        std::cout << "Cannot find a workspace but found CMakeList.txt, is workspace identifier deleted?\n";
+        return;
     }
 	
     boost::filesystem::path executableProjectTemplatePath;
 	
-    if (isPartOfAWorkspace)
+    if (workspaceIntegrityStatus == WorkspaceIntegrityStatus::Valid)
 	{
 		executableProjectTemplatePath = executablePath / "assets" / "ExecutableProjectTemplate";
 	}
@@ -54,7 +46,7 @@ void ExecutableProjectCommandHandler::execute()
 
 	boost::filesystem::copy(executableProjectTemplatePath, executableProjectDestinationPath, boost::filesystem::copy_options::recursive);
 
-	if (isPartOfAWorkspace)
+	if (workspaceIntegrityStatus == WorkspaceIntegrityStatus::Valid)
 	{
 		std::string executableProjectReferenceStr = std::format("\nadd_subdirectory({})", executableProjectName);
 		std::string workspaceCMakeLists = filesystem_utils::fileReadText(boost::filesystem::current_path() / "CMakeLists.txt");

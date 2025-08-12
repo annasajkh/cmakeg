@@ -9,7 +9,7 @@ ExecutableWorkspaceProjectCommandHandler::ExecutableWorkspaceProjectCommandHandl
 
 void ExecutableWorkspaceProjectCommandHandler::execute()
 {
-	workspaceCommandHandler.workspaceName = executableWorkspaceName;
+	workspaceCommandHandler.workspaceName = workspaceName;
 	workspaceCommandHandler.cppVersion = cppVersion;
 	workspaceCommandHandler.cmakeMinimumRequired = cmakeMinimumRequired;
 	workspaceCommandHandler.version = version;
@@ -19,7 +19,7 @@ void ExecutableWorkspaceProjectCommandHandler::execute()
 
 	workspaceCommandHandler.execute();
 	
-	boost::filesystem::path workspacePath = boost::filesystem::current_path() / executableWorkspaceName;
+	boost::filesystem::path workspacePath = boost::filesystem::current_path() / workspaceName;
 	boost::filesystem::current_path(workspacePath);
 
 	executableProjectCommandHandler.execute();

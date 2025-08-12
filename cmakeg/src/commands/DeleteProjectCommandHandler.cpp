@@ -13,61 +13,35 @@ DeleteProjectCommandHandler::DeleteProjectCommandHandler() : CommandHandler()
 
 void DeleteProjectCommandHandler::execute()
 {
-    if (name.find(".") != std::string::npos || name.find("/") != std::string::npos || name.find("\\") != std::string::npos)
+    WorkspaceIntegrityStatus workspaceIntegrityStatus = checkWorkspaceIntegrity();
+
+    switch (workspaceIntegrityStatus)
     {
-        std::cout << "Name of a project to delete shouldn't contains . or / or \\\n";
+    case WorkspaceIntegrityStatus::NotExist:
+        std::cout << "Cannot find the workspace\n";
+        return;
+    case WorkspaceIntegrityStatus::ContainsCMakeButNotIdentifier:
+		std::cout << "Cannot find the workspace but found CMakeList.txt, does workspace identifier get removed?\n";
         return;
     }
 
-    bool currentDirHaveCMakeList = boost::filesystem::exists(boost::filesystem::current_path() / "CMakeLists.txt");
-	bool isPartOfAWorkspace = currentDirHaveCMakeList;
+    std::vector<std::string> identifiers = {
+        "# EXECUTABLE PROJECT IDENTIFIER DON'T REMOVE THIS COMMENT IF YOU WANT TO KEEP USING CMAKEG TO MANAGE THIS PROJECT",
+        "# STATIC LIBRARY PROJECT IDENTIFIER DON'T REMOVE THIS COMMENT IF YOU WANT TO KEEP USING CMAKEG TO MANAGE THIS LIBRARY",
+        "# DYNAMIC LIBRARY PROJECT IDENTIFIER DON'T REMOVE THIS COMMENT IF YOU WANT TO KEEP USING CMAKEG TO MANAGE THIS LIBRARY"
+    };
 
-	if (isPartOfAWorkspace)
-	{
-		std::string workspaceCMakeFile = filesystem_utils::fileReadText(boost::filesystem::current_path() / "CMakeLists.txt");
+    ProjectIntegrityStatus projectIntegrityStatus = checkProjectIntegrity(name, identifiers);
 
-		isPartOfAWorkspace = isPartOfAWorkspace && (workspaceCMakeFile.find("# WORKSPACE INDICATOR DON'T REMOVE THIS COMMENT IF YOU WANT TO KEEP USING CMAKEG TO MANAGE THIS WORKSPACE") != std::string::npos);
-	}
-
-	if (!isPartOfAWorkspace && currentDirHaveCMakeList)
-	{
-		std::cout << "Cannot find a workspace but found CMakeList.txt, is workspace indicator deleted?\n";
-        return;
-	}
-    else if(!isPartOfAWorkspace && !currentDirHaveCMakeList)
+    switch (projectIntegrityStatus)
     {
-        std::cout << "Cannot find a workspace\n";
+    case ProjectIntegrityStatus::Skip:
         return;
-    }
-	
-	if (!(boost::filesystem::exists(boost::filesystem::current_path() / name)))
-	{
-		std::cout << "Project with the name \"" << name << "\" doesn't exist on the current directory";
-		return;
-	}
-
-    bool projectDirHaveCMakeList = boost::filesystem::exists(boost::filesystem::current_path() / name / "CMakeLists.txt");
-	bool isAProject = projectDirHaveCMakeList;
-
-	if (isAProject)
-	{
-		std::string projectCMakeFile = filesystem_utils::fileReadText(boost::filesystem::current_path() / name / "CMakeLists.txt");
-
-		isAProject = isAProject && (
-                        (projectCMakeFile.find("# EXECUTABLE PROJECT INDICATOR DON'T REMOVE THIS COMMENT IF YOU WANT TO KEEP USING CMAKEG TO MANAGE THIS PROJECT") != std::string::npos) ||
-                        (projectCMakeFile.find("# STATIC LIBRARY PROJECT INDICATOR DON'T REMOVE THIS COMMENT IF YOU WANT TO KEEP USING CMAKEG TO MANAGE THIS LIBRARY") != std::string::npos) ||
-                        (projectCMakeFile.find("# DYNAMIC LIBRARY PROJECT INDICATOR DON'T REMOVE THIS COMMENT IF YOU WANT TO KEEP USING CMAKEG TO MANAGE THIS LIBRARY") != std::string::npos)
-                    );
-	}
-
-	if (!isAProject && projectDirHaveCMakeList)
-	{
-		std::cout << "Cannot find a project but found CMakeList.txt, is project indicator deleted?\n";
+    case ProjectIntegrityStatus::NotExist:
+        std::cout << "Cannot find the project\n";
         return;
-	}
-    else if(!isAProject && !projectDirHaveCMakeList)
-    {
-        std::cout << "Cannot find a project\n";
+    case ProjectIntegrityStatus::ContainsCMakeButNotIdentifier:
+        std::cout << "Cannot find the project identifier but found CMakeList.txt, is project identifier get removed?\n";
         return;
     }
 
