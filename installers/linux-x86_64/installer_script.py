@@ -19,7 +19,7 @@ if __name__ == "__main__":
    --maintainer "AnnasVirtual" \
    --after-install install_permissions.sh \
    --after-remove <(echo "rm -rf /opt/cmakeg && rm -f /usr/bin/cmakeg") \
-   ../../build/linux-x86_64/bin/cmakeg/release=/opt/cmakeg"')
+   ../../build/linux-x86_64/bin/cmakeg/release/=/opt/cmakeg/"')
     
     os.system(f'bash -c "fpm -s dir -t rpm \
    -p cmakeg-{version}-linux-x64-fedora.rpm \
@@ -32,7 +32,7 @@ if __name__ == "__main__":
    --maintainer "AnnasVirtual" \
    --after-install install_permissions.sh \
    --after-remove <(echo "rm -rf /opt/cmakeg && rm -f /usr/bin/cmakeg") \
-   ../../build/linux-x86_64/bin/cmakeg/release=/opt/cmakeg"')
+   ../../build/linux-x86_64/bin/cmakeg/release/=/opt/cmakeg/"')
     
     os.system(f'bash -c "fpm -s dir -t pacman \
    -p cmakeg-{version}-linux-x64-arch.pkg.tar.zst \
@@ -45,4 +45,4 @@ if __name__ == "__main__":
    --maintainer "AnnasVirtual" \
    --after-install install_permissions.sh \
    --after-remove <(echo "rm -rf /opt/cmakeg && rm -f /usr/bin/cmakeg") \
-   ../../build/linux-x86_64/bin/cmakeg/release=/opt/cmakeg"')
+   ../../build/linux-x86_64/bin/cmakeg/release/=/opt/cmakeg/"')
