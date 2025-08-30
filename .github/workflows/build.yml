@@ -1,0 +1,54 @@
+name: Build The Program
+
+# on:
+#   push:
+#     tags:        
+#       - '*' 
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  version: 0.0.2
+
+jobs:
+  Build:
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            target: windows-amd64
+          - os: ubuntu-latest
+            target: linux-x86_64
+    runs-on: ${{matrix.os}}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get CMake
+        uses: lukka/get-cmake@v4.0.3
+
+      - name: Get python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13.7'
+
+      - name: "Build the program" 
+        run: python build.py --version $version
+
+      - name: "Build windows installer for the program" 
+        if: ${{ matrix.os == 'windows-latest' }}
+        uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
+        with:
+          path: installers/windows-amd64/installer_script.iss
+
+      # - name: "Install linux deps"
+      #   if: ${{ matrix.os == 'ubuntu-latest' }}
+      #   run: sudo apt-get install squashfs-tools
+
+      # - name: "Get ruby on linux" 
+      #   if: ${{ matrix.os == 'ubuntu-latest' }}
+      #   uses: ruby/setup-ruby@v1
+      

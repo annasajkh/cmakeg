@@ -3,6 +3,8 @@
 #include <format>
 #include "../utils/filesystem_utils.hpp"
 #include <boost/algorithm/algorithm.hpp>
+#include <boost/algorithm/string/replace.hpp>
+#include "../utils/global.hpp"
 
 using namespace cmakeg::commands;
 
@@ -77,19 +79,12 @@ void ExecutableProjectCommandHandler::execute()
 
 	if (isAddAssets)
 	{
-		std::string assetsCMakeStr = R"(
+		std::string assetsCMakeStrReplaced = global::assetsCMakeStr;
 
-add_custom_target(copy_assets_dir
-	COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different 
-        "${CMAKE_CURRENT_SOURCE_DIR}/assets/"
-        "$<TARGET_FILE_DIR:${PROJECT_NAME}>/assets"
-    COMMENT "Copying assets directory"
-)
-
-add_dependencies(${PROJECT_NAME} copy_assets_dir))";
+		boost::algorithm::replace_all(assetsCMakeStrReplaced, "ProjectName", executableProjectName);
 
 		std::string projectCMakeLists = filesystem_utils::fileReadText(executableProjectDestinationPath / "CMakeLists.txt");
-		filesystem_utils::fileWriteText(executableProjectDestinationPath / "CMakeLists.txt", projectCMakeLists + assetsCMakeStr);
+		filesystem_utils::fileWriteText(executableProjectDestinationPath / "CMakeLists.txt", projectCMakeLists + assetsCMakeStrReplaced);
 
 		boost::filesystem::create_directory(executableProjectDestinationPath / "assets");
 	}

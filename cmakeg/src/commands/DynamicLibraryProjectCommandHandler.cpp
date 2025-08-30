@@ -3,6 +3,8 @@
 #include "../utils/filesystem_utils.hpp"
 #include <boost/algorithm/algorithm.hpp>
 #include "DynamicLibraryProjectCommandHandler.hpp"
+#include "../utils/global.hpp"
+#include <boost/algorithm/string.hpp>
 
 using namespace cmakeg::commands;
 
@@ -89,19 +91,12 @@ void DynamicLibraryProjectCommandHandler::execute()
 
 	if (isAddAssets)
 	{
-		std::string assetsCMakeStr = R"(
+		std::string assetsCMakeStrReplaced = global::assetsCMakeStr;
 
-add_custom_target(copy_assets_dir
-	COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different 
-        "${CMAKE_CURRENT_SOURCE_DIR}/assets/"
-        "$<TARGET_FILE_DIR:${PROJECT_NAME}>/assets"
-    COMMENT "Copying assets directory"
-)
-
-add_dependencies(${PROJECT_NAME} copy_assets_dir))";
+		boost::algorithm::replace_all(assetsCMakeStrReplaced, "ProjectName", dynamicLibraryProjectName);
 
 		std::string projectCMakeLists = filesystem_utils::fileReadText(dynamicLibraryProjectDestinationPath / "CMakeLists.txt");
-		filesystem_utils::fileWriteText(dynamicLibraryProjectDestinationPath / "CMakeLists.txt", projectCMakeLists + assetsCMakeStr);
+		filesystem_utils::fileWriteText(dynamicLibraryProjectDestinationPath / "CMakeLists.txt", projectCMakeLists + assetsCMakeStrReplaced);
 
 		boost::filesystem::create_directory(dynamicLibraryProjectDestinationPath / "assets");
 	}

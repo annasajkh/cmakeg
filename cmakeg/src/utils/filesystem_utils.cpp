@@ -11,7 +11,6 @@ namespace filesystem_utils
 
 		// Replace all textToReplace in fileData with textToReplaceWith
 		boost::algorithm::replace_all(fileData, textToReplace, textToReplaceWith);
-
 		fileWriteText(pathToFile, fileData);
 	}
 
