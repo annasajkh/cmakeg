@@ -10,9 +10,6 @@ on:
     branches:
       - main
 
-env:
-  version: 0.0.2
-
 jobs:
   Build:
     strategy:
@@ -36,7 +33,7 @@ jobs:
           python-version: '3.13.7'
 
       - name: "Build the program" 
-        run: python build.py --version $version
+        run: python build.py --version 0.0.2
 
       - name: "Build windows installer for the program" 
         if: ${{ matrix.os == 'windows-latest' }}
