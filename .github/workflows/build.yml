@@ -70,6 +70,12 @@ jobs:
     - name: Download artifacts
       uses: actions/download-artifact@v5
     
+    - name: Debug output
+      run: ls -R build/linux-x86_64/bin/cmakeg/
+
+    - name: Debug output
+      run: ls -R build/windows-amd64/bin/cmakeg/
+    
     - name: Create Release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
