@@ -41,11 +41,18 @@ jobs:
         with:
           path: installers/windows-amd64/installer_script.iss
 
-      # - name: "Install linux deps"
-      #   if: ${{ matrix.os == 'ubuntu-latest' }}
-      #   run: sudo apt-get install squashfs-tools
+      - name: "Install linux deps"
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: sudo apt-get install squashfs-tools
 
-      # - name: "Get ruby on linux" 
-      #   if: ${{ matrix.os == 'ubuntu-latest' }}
-      #   uses: ruby/setup-ruby@v1
+      - name: "Get ruby on linux" 
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        uses: ruby/setup-ruby@v1
       
+      - name: "Install fpm"
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: gem install fpm && fpm --version
+      
+      - name: "Build linux installers"
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: python installers/linux-x86_64/installer_script.py --version 0.0.2
