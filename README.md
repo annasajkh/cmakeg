@@ -45,10 +45,10 @@ int main()
 ```
 Compile everything (run this in the TestWorkspace directory)
 ```bash
-python build.py --version 0.0.1
+python build.py
 ```
 This is debug by default for release build use
 ```bash
-python build.py --build-type release --version 0.0.1
+python build.py --build-type release
 ```
 The executable should be compiled to `TestWorkspace\build\your-os-and-arch\bin\TestExecutableProject`
