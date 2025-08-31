@@ -17,8 +17,8 @@ if __name__ == "__main__":
    --description "Program to generate new cmake projects" \
    --url "https://github.com/annasajkh/cmakeg" \
    --maintainer "AnnasVirtual" \
-   --after-install install_permissions.sh \
-   --after-remove <(echo "rm -rf /opt/cmakeg && rm -f /usr/bin/cmakeg") \
+   --after-install installers/linux-x86_64/install_permissions.sh \
+   --after-remove installers/linux-x86_64/uninstall.sh \
    build/linux-x86_64/bin/cmakeg/release/=/opt/cmakeg/"')
     
     os.system(f'/bin/bash -c "fpm -s dir -t rpm \
@@ -30,8 +30,8 @@ if __name__ == "__main__":
    --description "Program to generate new cmake projects" \
    --url "https://github.com/annasajkh/cmakeg" \
    --maintainer "AnnasVirtual" \
-   --after-install install_permissions.sh \
-   --after-remove <(echo "rm -rf /opt/cmakeg && rm -f /usr/bin/cmakeg") \
+   --after-install installers/linux-x86_64/install_permissions.sh \
+   --after-remove installers/linux-x86_64/uninstall.sh \
    build/linux-x86_64/bin/cmakeg/release/=/opt/cmakeg/"')
     
     os.system(f'/bin/bash -c "fpm -s dir -t pacman \
@@ -43,6 +43,6 @@ if __name__ == "__main__":
    --description "Program to generate new cmake projects" \
    --url "https://github.com/annasajkh/cmakeg" \
    --maintainer "AnnasVirtual" \
-   --after-install install_permissions.sh \
-   --after-remove <(echo "rm -rf /opt/cmakeg && rm -f /usr/bin/cmakeg") \
+   --after-install installers/linux-x86_64/install_permissions.sh \
+   --after-remove installers/linux-x86_64/uninstall.sh \
    build/linux-x86_64/bin/cmakeg/release/=/opt/cmakeg/"')
