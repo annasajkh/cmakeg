@@ -14,7 +14,7 @@ using namespace cmakeg::commands;
 int main(int argc, char* argv[])
 {
     CLI::App app{ "Generate cmake projects based on a template" };
-    std::string version = "0.0.3";
+    std::string version = "0.0.2";
 
     argv = app.ensure_utf8(argv);
 

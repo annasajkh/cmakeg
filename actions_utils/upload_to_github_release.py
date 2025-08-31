@@ -1,6 +1,6 @@
 import os
 
-version = "0.0.3"
+version = "0.0.2"
 
 os.system(f'gh release create {version} --title "Released {version}" --generate-notes')
 

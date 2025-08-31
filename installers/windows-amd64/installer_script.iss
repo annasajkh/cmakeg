@@ -3,7 +3,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "cmakeg"
-#define MyAppVersion "0.0.3"
+#define MyAppVersion "0.0.2"
 #define MyAppPublisher "AnnasVirtual"
 #define MyAppURL "https://github.com/annasajkh/cmakeg"
 #define MyAppExeName "cmakeg.exe"
@@ -34,7 +34,7 @@ DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
 LicenseFile=..\..\LICENSE
 OutputDir=..\..\installers\windows-amd64
-OutputBaseFilename=cmakeg-0.0.3-win-x64-setup
+OutputBaseFilename=cmakeg-0.0.2-win-x64-setup
 SolidCompression=yes
 WizardStyle=modern
 
