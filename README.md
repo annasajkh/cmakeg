@@ -43,7 +43,7 @@ int main()
     std::cin.get();
 }
 ```
-Compile the everything (run this in the TestWorkspace directory)
+Compile everything (run this in the TestWorkspace directory)
 ```bash
 python build.py --version 0.0.1
 ```
