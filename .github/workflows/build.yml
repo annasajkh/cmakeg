@@ -39,7 +39,7 @@ jobs:
           bundler-cache: true
 
       - name: "Build the program" 
-        run: python build.py --build-type release --version 0.0.2
+        run: python build.py --build-type release
 
       - name: "Build windows installer for the program" 
         if: ${{ matrix.os == 'windows-latest' }}
