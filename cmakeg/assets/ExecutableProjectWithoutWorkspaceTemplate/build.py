@@ -60,16 +60,26 @@ def build_project(build_type: str):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Cmake builder script")
     parser.add_argument("--build-type", type=str, help="The build type either debug or release", default="debug")        
-    
+    parser.add_argument("--version", type=str, help="The version of the program")
+
     args = parser.parse_args()
     
+    if args.version is None:
+        print("Error: --version is not provided")
+        exit(-1)
+        
+    if args.build_type is None:
+        print("Error: --build-type is not provided")
+        exit(-1)
+
     if not args.build_type in ["debug", "release"]:
         print("Error: --build-type has to be either debug or release")
-    else:
-        version_file = open("version.txt")
-        version = version_file.read().strip()
-        version_file.close()        
-        
-        replace_version("CMakeLists.txt", [("project(${PROJECT_NAME} VERSION", "project(${PROJECT_NAME} VERSION " + version + " LANGUAGES CXX)")])
+        exit(-1)
 
-        build_project(args.build_type)
+    version = args.version
+    
+    print(f"Building with version: {version}")
+        
+    replace_version("CMakeLists.txt", [("project(${PROJECT_NAME} VERSION", "project(${PROJECT_NAME} VERSION " + version + " LANGUAGES CXX)")])
+
+    build_project(args.build_type)

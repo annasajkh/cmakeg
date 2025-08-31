@@ -19,7 +19,7 @@ def run_fpm(version, pkgtype, output):
         "../../build/linux-x86_64/bin/cmakeg/release/=/opt/cmakeg/"
     ])
 
-version = "0.0.2"
+version = "0.0.3"
 
 run_fpm(version, "deb", f"cmakeg-{version}-linux-x64-debian.deb")
 run_fpm(version, "rpm", f"cmakeg-{version}-linux-x64-fedora.rpm")
