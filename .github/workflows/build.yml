@@ -34,7 +34,7 @@ jobs:
       
       - name: "Install linux deps"
         if: ${{ matrix.os == 'ubuntu-latest' }}
-        run: sudo apt-get install squashfs-tools
+        run: sudo apt-get update && sudo apt-get install -y fakeroot binutils tar gzip bzip2 xz-utils zstd file libarchive-tools squashfs-tools
 
       - name: "Get ruby on linux" 
         if: ${{ matrix.os == 'ubuntu-latest' }}
@@ -71,9 +71,6 @@ jobs:
 
     - name: Download artifacts
       uses: actions/download-artifact@v5
-
-    - name: Install deps for Arch packaging
-      run: sudo apt-get update && sudo apt-get install -y fakeroot binutils tar gzip bzip2 xz-utils zstd file bsdtar
 
     - name: Debug output
       run: ls -R installers/
