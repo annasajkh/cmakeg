@@ -68,12 +68,12 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v5
-  
+
     - name: Download artifacts
       uses: actions/download-artifact@v5
-      with:
-        name: installers
-        path: installers/
+
+    - name: Install deps for Arch packaging
+      run: sudo apt-get update && sudo apt-get install -y fakeroot binutils tar gzip bzip2 xz-utils zstd file bsdtar
 
     - name: Debug output
       run: ls -R installers/
