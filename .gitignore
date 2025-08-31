@@ -6,3 +6,7 @@
 /.idea
 /cmakeg/dependencies/boost
 /cmakeg/dependencies/CLI11
+/installers/linux-x86_64/*.pkg.tar.zst
+/installers/linux-x86_64/*.deb
+/installers/linux-x86_64/*.rpm
+/installers/windows-amd64/*.exe

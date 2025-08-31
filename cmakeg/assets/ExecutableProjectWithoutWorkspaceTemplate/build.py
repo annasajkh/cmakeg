@@ -2,6 +2,29 @@ import os
 import platform
 import subprocess
 import argparse
+from typing import List
+
+def replace_version(file_path: str, line_to_replace_clues: List[tuple[str, str]]):
+    file = open(file_path)
+    file_content = file.read()
+    file.close()
+
+    file_content_modified = []
+
+    for line in file_content.split("\n"):
+        modify_line = False
+
+        for line_to_replace_clue in line_to_replace_clues:
+            if line_to_replace_clue[0] in line:
+                modify_line = True
+                file_content_modified.append(line_to_replace_clue[1])
+
+        if not modify_line:
+            file_content_modified.append(line)
+
+    file = open(file_path, "w")
+    file.write("\n".join(file_content_modified))
+    file.close()
 
 def build_project(build_type: str):
     system = platform.system()
@@ -43,4 +66,10 @@ if __name__ == "__main__":
     if not args.build_type in ["debug", "release"]:
         print("Error: --build-type has to be either debug or release")
     else:
+        version_file = open("version.txt")
+        version = version_file.read()
+        version_file.close()        
+        
+        replace_version("CMakeLists.txt", [("project(${PROJECT_NAME} VERSION", "project(${PROJECT_NAME} VERSION " + version + " LANGUAGES CXX)")])
+
         build_project(args.build_type)

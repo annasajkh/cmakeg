@@ -53,7 +53,7 @@ jobs:
       
       - name: "Build linux installers"
         if: ${{ matrix.os == 'ubuntu-latest' }}
-        run: python installers/linux-x86_64/installer_script.py --version 0.0.2
+        run: python installers/linux-x86_64/installer_script.py
 
       - name: Upload windows installer
         if: ${{ matrix.os == 'windows-latest' }}
@@ -68,9 +68,9 @@ jobs:
         with:
           name: linux-installers
           path: |
-            cmakeg-*.deb
-            cmakeg-*.rpm
-            cmakeg-*.pkg.tar.zst
+            installers/linux-x86_64/*.deb
+            installers/linux-x86_64/*.rpm
+            installers/linux-x86_64/*.pkg.tar.zst
 
   create-release:
     needs: build
@@ -91,4 +91,4 @@ jobs:
     - name: Create Release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: python actions_utils/upload_to_github_release.py --version 0.0.2
+      run: python actions_utils/upload_to_github_release.py

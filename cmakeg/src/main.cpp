@@ -7,12 +7,15 @@
 #include "commands/DynamicLibraryProjectCommandHandler.hpp"
 #include "commands/DeleteProjectCommandHandler.hpp"
 #include "commands/ReferenceCommandHandler.hpp"
+#include "commands/VersionCommandHandler.hpp"
 
 using namespace cmakeg::commands;
 
 int main(int argc, char* argv[])
 {
     CLI::App app{ "Generate cmake projects based on a template" };
+    std::string version = "0.0.2";
+
     argv = app.ensure_utf8(argv);
 
     auto workspaceCommandHandler = std::make_shared<WorkspaceCommandHandler>();
@@ -22,6 +25,7 @@ int main(int argc, char* argv[])
     auto staticLibraryProjectCommandHandler = std::make_shared<StaticLibraryProjectCommandHandler>();
     auto dynamicLibraryProjectCommandHandler = std::make_shared<DynamicLibraryProjectCommandHandler>();
     auto referenceCommandHandler = std::make_shared<ReferenceCommandHandler>();
+    auto versionCommandHandler = std::make_shared<VersionCommandHandler>();
 
     CLI::App* workspaceSubCommand = app.add_subcommand("workspace", "Create a new workspace (command can be run from anywhere)");
     workspaceSubCommand->add_option("--name", workspaceCommandHandler->workspaceName, "The name of the workspace")->required();
@@ -65,6 +69,8 @@ int main(int argc, char* argv[])
     referenceProjectSubCommand->add_option("--library-source-name", referenceCommandHandler->librarySourceName, "The name of the library to reference")->required();
     referenceProjectSubCommand->add_option("--project-destination-name", referenceCommandHandler->projectDestinationName, "The name of the target project to reference to")->required();
 
+    CLI::App* versionProjectSubCommand = app.add_subcommand("version", "Get the version of cmakeg");
+
     CLI11_PARSE(app, argc, argv);
 
     if (app.got_subcommand("workspace"))
@@ -95,4 +101,10 @@ int main(int argc, char* argv[])
     {
         referenceCommandHandler->execute();
     }
+    else if (app.got_subcommand("version"))
+    {
+        versionCommandHandler->version = version;
+        versionCommandHandler->execute();
+    }
+    
 }

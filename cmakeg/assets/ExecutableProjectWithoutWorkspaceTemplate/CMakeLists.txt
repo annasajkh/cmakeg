@@ -35,4 +35,4 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     INSTALL_RPATH ""
     BUILD_RPATH "$ORIGIN"
     INSTALL_RPATH "$ORIGIN"
-)v
+)
