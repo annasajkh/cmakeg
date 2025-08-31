@@ -1,10 +1,14 @@
 name: Build The Program
 
+# on:
+#   push:
+#     tags:        
+#       - '*' 
+
 on:
   push:
-    tags:        
-      - '*' 
-
+    branches:
+      - main
 
 jobs:
   build:
@@ -58,7 +62,7 @@ jobs:
 
       - name: Upload windows installer
         if: ${{ matrix.os == 'windows-latest' }}
-        uses: actions/upload-artifact@v5s
+        uses: actions/upload-artifact@v5
         with:
           name: windows-installer
           path: installers/windows-amd64/*.exe
@@ -78,7 +82,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
+    # if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
     steps:
     - name: Checkout code
       uses: actions/checkout@v5
