@@ -18,12 +18,12 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 
 target_link_libraries(${PROJECT_NAME} PRIVATE CLI11::CLI11 Boost::dll Boost::algorithm)
 
-
-add_custom_target(copy_assets_dir
-	COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different 
-        "${CMAKE_CURRENT_SOURCE_DIR}/assets/"
+add_custom_target(cmakeg_copy_assets_dir
+    COMMAND ${CMAKE_COMMAND} -E rm -rf "$<TARGET_FILE_DIR:${PROJECT_NAME}>/assets"
+    COMMAND ${CMAKE_COMMAND} -E copy_directory 
+        "${CMAKE_CURRENT_SOURCE_DIR}/assets"
         "$<TARGET_FILE_DIR:${PROJECT_NAME}>/assets"
-    COMMENT "Copying assets directory"
+    COMMENT "Syncing assets directory"
 )
 
-add_dependencies(${PROJECT_NAME} copy_assets_dir)
+add_dependencies(${PROJECT_NAME} cmakeg_copy_assets_dir)
