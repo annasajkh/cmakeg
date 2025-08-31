@@ -97,7 +97,9 @@ if __name__ == "__main__":
     else:
         version_file = open("version.txt")
         version = version_file.read().strip()
-        version_file.close()        
+        version_file.close()
+        
+        print(f"Building with version: {version}")
         
         replace_version("installers/windows-amd64/installer_script.iss", [("#define MyAppVersion", f"#define MyAppVersion \"{version}\""), ("OutputBaseFilename", f"OutputBaseFilename=cmakeg-{version}-win-x64-setup")])
         replace_version("actions_utils/upload_to_github_release.py", [("version = ", f"version = \"{version}\"")])

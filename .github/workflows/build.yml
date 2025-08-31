@@ -38,6 +38,9 @@ jobs:
           ruby-version: '3.4.5'
           bundler-cache: true
 
+      - name: "Write version"
+        run: python actions_utils/write_version.py --version ${{ github.ref_name }}
+
       - name: "Build the program" 
         run: python build.py --build-type release
 
