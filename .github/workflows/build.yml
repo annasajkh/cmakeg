@@ -1,14 +1,10 @@
 name: Build The Program
 
-# on:
-#   push:
-#     tags:        
-#       - '*' 
-
 on:
   push:
-    branches:
-      - main
+    tags:        
+      - '*' 
+
 
 jobs:
   build:
@@ -59,12 +55,30 @@ jobs:
       - name: "Build linux installers"
         if: ${{ matrix.os == 'ubuntu-latest' }}
         run: python installers/linux-x86_64/installer_script.py --version 0.0.2
+
+      - name: Upload windows installer
+        if: ${{ matrix.os == 'windows-latest' }}
+        uses: actions/upload-artifact@v5s
+        with:
+          name: windows-installer
+          path: installers/windows-amd64/*.exe
+      
+      - name: Upload linux installers
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        uses: actions/upload-artifact@v5
+        with:
+          name: linux-installers
+          path: |
+            cmakeg-*.deb
+            cmakeg-*.rpm
+            cmakeg-*.pkg.tar.zst
+
   create-release:
     needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    # if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
     steps:
     - name: Checkout code
       uses: actions/checkout@v5
