@@ -62,14 +62,14 @@ jobs:
 
       - name: Upload windows installer
         if: ${{ matrix.os == 'windows-latest' }}
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v4
         with:
           name: windows-installer
           path: installers/windows-amd64/*.exe
       
       - name: Upload linux installers
         if: ${{ matrix.os == 'ubuntu-latest' }}
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v4
         with:
           name: linux-installers
           path: |
