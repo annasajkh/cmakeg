@@ -1,4 +1,3 @@
-import argparse
 import os
 import subprocess
 
@@ -21,8 +20,6 @@ def run_fpm(version, pkgtype, output):
     ])
 
 version = "0.0.2"
-
-os.chdir("installers/linux-x86_64")
 
 run_fpm(version, "deb", f"cmakeg-{version}-linux-x64-debian.deb")
 run_fpm(version, "rpm", f"cmakeg-{version}-linux-x64-fedora.rpm")

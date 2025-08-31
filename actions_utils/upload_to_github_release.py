@@ -1,4 +1,3 @@
-import argparse
 import os
 
 version = "0.0.2"

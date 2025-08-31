@@ -53,8 +53,9 @@ jobs:
       
       - name: "Build linux installers"
         if: ${{ matrix.os == 'ubuntu-latest' }}
-        run: python installers/linux-x86_64/installer_script.py
-
+        working-directory: installers/linux-x86_64/
+        run: python installer_script.py
+      
       - name: Upload windows installer
         if: ${{ matrix.os == 'windows-latest' }}
         uses: actions/upload-artifact@v4
