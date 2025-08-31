@@ -105,6 +105,5 @@ int main(int argc, char* argv[])
     {
         versionCommandHandler->version = version;
         versionCommandHandler->execute();
-    }
-    
+    }   
 }
