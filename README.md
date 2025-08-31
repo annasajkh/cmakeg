@@ -32,7 +32,7 @@ Reference TestStaticLibrary to the TestExecutableProject so you can use the libr
 ```bash
 cmakeg reference --library-source-name TestStaticLibrary --project-destination-name TestExecutableProject
 ```
-Change the content of `main.cpp` in `TestWorkspace/TestExecutableProject/src/main.cpp` to
+Change the content of `main.cpp` in `TestWorkspace/TestExecutableProject/src/main.cpp` to be
 ```cpp
 #include <iostream>
 #include "TestStaticLibrary/Computer.hpp"
