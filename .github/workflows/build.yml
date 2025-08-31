@@ -62,17 +62,22 @@ jobs:
   create-release:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     # if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
     steps:
     - name: Checkout code
       uses: actions/checkout@v5
-    
+  
     - name: Download artifacts
       uses: actions/download-artifact@v5
-    
+      with:
+        name: installers
+        path: installers/
+
     - name: Debug output
       run: ls -R installers/
-
+    
     - name: Create Release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
