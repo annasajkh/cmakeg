@@ -10,9 +10,10 @@ if __name__ == "__main__":
 
     os.system(f'gh release create {version} --title "Released {version}" --generate-notes')
 
-    for r, d, file_paths in os.walk("installers/"):
-        for file_path in file_paths:
-            print(f"file: {file_path}")
+    for root, directories, files in os.walk("installers"):
+        for file in files:
+            file_path = os.path.join(root, file)
 
-            if ".exe" in file_path or ".deb" in file_path or ".rpm" in file_path or ".rpm" in file_path or ".pkg.tar.zst" in file_path or "tar.gz" in file_path:
+            if ".exe" in file or ".deb" in file or ".rpm" in file or ".rpm" in file or ".pkg.tar.zst" in file:
+                print(f"uploading: {file} on {file_path}")
                 os.system(f'gh release upload {version} "' + file_path + '" --clobber')
