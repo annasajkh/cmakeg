@@ -96,7 +96,7 @@ if __name__ == "__main__":
         print("Error: --build-type has to be either debug or release")
     else:
         version_file = open("version.txt")
-        version = version_file.read()
+        version = version_file.read().strip()
         version_file.close()        
         
         replace_version("installers/windows-amd64/installer_script.iss", [("#define MyAppVersion", f"#define MyAppVersion \"{version}\""), ("OutputBaseFilename", f"OutputBaseFilename=cmakeg-{version}-win-x64-setup")])

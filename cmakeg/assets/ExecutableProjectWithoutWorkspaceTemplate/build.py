@@ -67,7 +67,7 @@ if __name__ == "__main__":
         print("Error: --build-type has to be either debug or release")
     else:
         version_file = open("version.txt")
-        version = version_file.read()
+        version = version_file.read().strip()
         version_file.close()        
         
         replace_version("CMakeLists.txt", [("project(${PROJECT_NAME} VERSION", "project(${PROJECT_NAME} VERSION " + version + " LANGUAGES CXX)")])
