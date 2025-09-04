@@ -1,4 +1,4 @@
-# Cmake Project Generator
+# Cmake C++ Project Generator
 
 ## Building
 
@@ -8,7 +8,7 @@
 
 ### Compiling
 - Clone the repo `git clone https://github.com/annasajkh/cmakeg`
-- For debug build do `python build.py` for release build do `python build.py --build-type release`
+- For debug build you do `python build.py --version 0.0.2` for release build you do `python build.py --build-type release --version 0.0.2`
 
 ### Example Usage
 NOTE: You have to add cmakeg to the path environment variable manually if you compile it from source<br><br>
