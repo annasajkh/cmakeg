@@ -11,7 +11,7 @@
 - For debug build do `python build.py` for release build do `python build.py --build-type release`
 
 ### Example Usage
-NOTE: You have to add to the path environment variable manually if you compile it from source<br><br>
+NOTE: You have to add cmakeg to the path environment variable manually if you compile it from source<br><br>
 Create a new workspace
 ```bash
 cmakeg workspace --name TestWorkspace
