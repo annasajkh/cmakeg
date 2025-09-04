@@ -1,4 +1,4 @@
-# Cmake C++ Project Generator
+# cmakeg
 
 ## Building
 
